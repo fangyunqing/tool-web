@@ -1,0 +1,108 @@
+/* 超集 */
+.custom-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* 换行 */
+.custom-flex-wrap {
+  flex-wrap: wrap;
+}
+
+/* 不换行 */
+.custom-flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+/* 由于align-items: flex-start在后面，故覆盖了"u-flex"的align-items: center */
+.custom-col-top {
+  align-items: flex-start;
+}
+
+/* 垂直居中 */
+.custom-col-center {
+  align-items: center;
+}
+
+/* 顶部对齐 */
+.custom-col-top {
+  align-items: flex-start;
+}
+
+/* 底部对齐 */
+.custom-col-bottom {
+  align-items: flex-end;
+}
+
+/* 左边对齐 */
+.custom-row-left {
+  justify-content: flex-start;
+}
+
+/* 水平居中 */
+.custom-row-center {
+  justify-content: center;
+}
+
+/* 右边对齐 */
+.custom-row-right {
+  justify-content: flex-end;
+}
+
+/* 水平两端对齐，项目之间的间隔都相等 */
+.custom-row-between {
+  justify-content: space-between;
+}
+
+/* 水平每个项目两侧的间隔相等，所以项目之间的间隔比项目与父元素两边的间隔大一倍 */
+.custom-row-around {
+  justify-content: space-around;
+}
+
+.custom-flex-1 {
+  flex: 1;
+}
+
+.custom-flex-2 {
+  flex: 2;
+}
+
+.custom-flex-3 {
+  flex: 3;
+}
+
+.custom-flex-4 {
+  flex: 4;
+}
+
+.custom-flex-5 {
+  flex: 5;
+}
+
+.custom-flex-6 {
+  flex: 6;
+}
+
+.custom-flex-7 {
+  flex: 7;
+}
+
+.custom-flex-8 {
+  flex: 8;
+}
+.custom-flex-9 {
+  flex: 9;
+}
+
+.custom-flex-10 {
+  flex: 10;
+}
+
+.custom-flex-11 {
+  flex: 11;
+}
+
+.custom-flex-12 {
+  flex: 12;
+}

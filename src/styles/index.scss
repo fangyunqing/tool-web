@@ -4,6 +4,9 @@
 @import './element-ui.scss';
 @import './sidebar.scss';
 @import './btn.scss';
+@import './flex.scss';
+@import './margin.scss';
+@import './height.scss';
 
 body {
   height: 100%;
@@ -33,7 +36,7 @@ html {
 }
 
 .no-padding {
-  padding: 0px !important;
+  padding: 0 !important;
 }
 
 .padding-content {
@@ -130,7 +133,7 @@ aside {
 }
 
 .pagination-container {
-  margin-top: 30px;
+  margin-top: 5px;
 }
 
 .text-center {
@@ -188,4 +191,32 @@ aside {
 
 .multiselect--active {
   z-index: 1000 !important;
+}
+
+/* 按钮右靠齐*/
+.operate-nav {
+  margin-bottom: 10px;
+  direction: rtl
+}
+
+.el-scrollbar__wrap
+{
+  overflow-x: hidden;
+}
+
+.el-form-item .el-select {
+  width: 100%;
+}
+
+.el-form-item {
+  margin-bottom: 20px !important;
+}
+
+/*下拉框最后一个显示不完全*/
+.el-select-dropdown__wrap.el-scrollbar__wrap {
+  margin-bottom: 0 !important;
+}
+
+.item .el-form-item__label{
+  color: dodgerblue;
 }

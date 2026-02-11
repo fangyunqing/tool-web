@@ -20,6 +20,11 @@ import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
 
+import i18n from './language/index.js'
+
+import _ from 'lodash'
+Vue.prototype._ = _
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -48,6 +53,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  i18n,
   store,
   render: h => h(App)
 })
