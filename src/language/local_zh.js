@@ -34,8 +34,8 @@ module.exports = {
   toolOrder: {
     code: '机器码',
     fee: '费用',
-    add_count_num: '账户增加数',
-    add_day_num: '天数增加数',
+    add_account_num: '账户(+)',
+    add_day_num: '天数(+)',
     order_status: '订单状态',
     create_time: '创建时间',
     pay_time: '付款时间',

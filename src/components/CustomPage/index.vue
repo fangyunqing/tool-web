@@ -30,7 +30,7 @@
     </div>
     <div class="custom-margin-top-12">
       <el-table
-        :data="data.list"
+        :data="data"
         tooltip-effect="dark"
         height="50vh"
         :row-style="{padding:'5px'}"

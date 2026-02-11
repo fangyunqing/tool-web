@@ -5,7 +5,7 @@
       :data="data"
       :search.sync="search"
       :rules="rules"
-      :placeholder="$t('toolOrder.enterMachineCode')"
+      :placeholder="$t('toolOrder.enterMachineCode').toString()"
       :empty-data="emptyData"
       drawer-size="30%"
       @refresh="getList"
@@ -16,13 +16,13 @@
       @current="currentData = $event"
     >
       <template v-slot:primary>
-        <el-table-column align="center" :label="$t('toolOrder.fee')" min-width="120" prop="fee" />
-        <el-table-column align="center" :label="$t('toolOrder.add_count_num')" min-width="200" prop="add_count_num" />
-        <el-table-column align="center" :label="$t('toolOrder.add_day_num')" min-width="80" prop="add_day_num" />
-        <el-table-column align="center" :label="$t('toolOrder.order_status')" min-width="120" prop="order_status" />
-        <el-table-column align="center" :label="$t('toolOrder.create_time')" min-width="80" prop="create_time" />
-        <el-table-column align="center" :label="$t('toolOrder.pay_time')" min-width="120" prop="pay_time" />
-        <el-table-column align="center" :label="$t('toolOrder.finish_time')" min-width="80" prop="finish_time" />
+        <el-table-column align="center" :label="$t('toolOrder.fee').toString()" min-width="80" prop="fee" />
+        <el-table-column align="center" :label="$t('toolOrder.add_account_num').toString()" min-width="50" prop="add_account_num" />
+        <el-table-column align="center" :label="$t('toolOrder.add_day_num').toString()" min-width="50" prop="add_day_num" />
+        <el-table-column align="center" :label="$t('toolOrder.order_status').toString()" min-width="80" prop="order_status" />
+        <el-table-column align="center" :label="$t('toolOrder.create_time').toString()" min-width="120" prop="create_time" />
+        <el-table-column align="center" :label="$t('toolOrder.pay_time').toString()" min-width="120" prop="pay_time" />
+        <el-table-column align="center" :label="$t('toolOrder.finish_time').toString()" min-width="80" prop="finish_time" />
       </template>
 
       <template v-slot:addOrEdit="{ current }">
@@ -100,12 +100,12 @@ export default {
       /**
        * 数据
        */
-      data: {},
+      data: [],
       /**
        * 搜索
        */
       search: {
-        code: ''
+        name: ''
       },
       /**
        * 校验规则
@@ -134,8 +134,9 @@ export default {
      * 获取数据
      */
     getList() {
-      queryToolOrderByMachineCode(this.search.code)
+      queryToolOrderByMachineCode(this.search.name)
         .then(res => {
+          console.log(this.data)
           this.data = res.data
         })
         .finally(() => {})

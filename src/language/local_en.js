@@ -32,8 +32,8 @@ module.exports = {
   toolOrder: {
     code: 'Machine Code',
     fee: 'Fee',
-    add_count_num: 'Add-Count-Num',
-    add_day_num: 'Add-Day-Num',
+    add_account_num: 'Account(+)',
+    add_day_num: 'Day(+)',
     order_status: 'Order Status',
     create_time: 'Create Time',
     pay_time: 'Pay Time',

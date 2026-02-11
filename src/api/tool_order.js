@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function queryToolOrderByMachineCode(code) {
   return request({
-    url: `/api/tool_order/${code}`,
+    url: `/tool_order/code/${code}`,
     method: 'get'
   })
 }
 
 export function updateToolOrder(data) {
   return request({
-    url: '/api/tool_order/update',
+    url: '/tool_order/update',
     method: 'post',
     data
   })
@@ -17,7 +17,7 @@ export function updateToolOrder(data) {
 
 export function addToolOrder(data) {
   return request({
-    url: '/api/tool_order/add',
+    url: '/tool_order/add',
     method: 'post',
     data
   })
