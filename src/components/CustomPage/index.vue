@@ -30,6 +30,7 @@
     </div>
     <div class="custom-margin-top-12">
       <el-table
+        v-loading="loading"
         :data="data"
         tooltip-effect="dark"
         height="50vh"
@@ -118,7 +119,7 @@ export default {
      * 数据
      */
     data: {
-      type: Object,
+      type: Array,
       required: true
     },
     /**
@@ -181,7 +182,19 @@ export default {
       /**
        * 抽屉高度
        */
-      drawerFormHeight: ''
+      drawerFormHeight: '',
+      /**
+       * 列表加载
+       */
+      loading: false
+    }
+  },
+  watch: {
+    current: {
+      handler(value) {
+        this.$emit('current', value)
+      },
+      deep: true
     }
   },
   mounted() {
@@ -195,6 +208,7 @@ export default {
      * 响应添加
      */
     clickAdd() {
+      this.$emit('click-add')
       this.currentState = 'add'
       this.current = this._.cloneDeep(this.emptyData)
       this.showDrawer = true
