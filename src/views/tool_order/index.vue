@@ -34,28 +34,28 @@
 
       <template v-slot:addOrEdit="{ current }">
 
-        <el-form-item :label="$t('toolOrder.code')" prop="code">
+        <el-form-item :label="$t('toolOrder.code').toString()" prop="code">
           <el-input
             v-model="current.code"
           />
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.fee')" prop="fee">
+        <el-form-item :label="$t('toolOrder.fee').toString()" prop="fee">
           <el-tag>{{ current.fee }}</el-tag>
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.account_price')" prop="account_price">
+        <el-form-item :label="$t('toolOrder.account_price').toString()" prop="account_price">
           <el-tag>{{ current.account_price }}</el-tag>
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.add_account_num')" prop="add_account_num">
+        <el-form-item :label="$t('toolOrder.add_account_num').toString()" prop="add_account_num">
           <el-input-number
             v-model.number="current.add_account_num"
             :min="1"
             :max="99"
           />
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.day_price')" prop="account_price">
+        <el-form-item :label="$t('toolOrder.day_price').toString()" prop="account_price">
           <el-tag>{{ current.day_price }}</el-tag>
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.add_day_num')" prop="add_day_num">
+        <el-form-item :label="$t('toolOrder.add_day_num').toString()" prop="add_day_num">
           <el-input-number
             v-model="current.add_day_num"
             :min="1"
@@ -66,42 +66,42 @@
 
       <template v-slot:view="{ current }">
 
-        <el-form-item :label="$t('toolOrder.code')" prop="code">
+        <el-form-item :label="$t('toolOrder.code').toString()" prop="code">
           {{ current.code }}
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.fee')" prop="fee">
+        <el-form-item :label="$t('toolOrder.fee').toString()" prop="fee">
           {{ current.fee }}
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.account_price')" prop="account_price">
+        <el-form-item :label="$t('toolOrder.account_price').toString()" prop="account_price">
           <el-tag>{{ current.account_price }}</el-tag>
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.add_account_num')" prop="add_count_num">
+        <el-form-item :label="$t('toolOrder.add_account_num').toString()" prop="add_count_num">
           {{ current.add_account_num }}
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.day_price')" prop="account_price">
+        <el-form-item :label="$t('toolOrder.day_price').toString()" prop="day_price">
           <el-tag>{{ current.day_price }}</el-tag>
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.add_day_num')" prop="add_day_num">
+        <el-form-item :label="$t('toolOrder.add_day_num').toString()" prop="add_day_num">
           {{ current.add_day_num }}
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.order_status')" prop="order_status">
+        <el-form-item :label="$t('toolOrder.order_status').toString()" prop="order_status">
           <el-tag v-if="current.order_status === 1" type="info">未付款</el-tag>
           <el-tag v-else-if="current.order_status === 2">付款未确认</el-tag>
           <el-tag v-else type="3">已完成</el-tag>
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.create_time')" prop="create_time">
+        <el-form-item :label="$t('toolOrder.create_time').toString()" prop="create_time">
           {{ current.create_time }}
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.pay_time')" prop="pay_time">
+        <el-form-item :label="$t('toolOrder.pay_time').toString()" prop="pay_time">
           {{ current.pay_time }}
         </el-form-item>
-        <el-form-item :label="$t('toolOrder.finish_time')" prop="finish_time">
+        <el-form-item :label="$t('toolOrder.finish_time').toString()" prop="finish_time">
           {{ current.finish_time }}
         </el-form-item>
       </template>
 
       <template v-slot:action="{ current }">
-        <el-tooltip :content="$t('common.delete')" placement="top">
+        <el-tooltip :content="$t('common.delete').toString()" placement="top">
           <el-button type="text" @click="showPayVoucher = true">
             <i class="el-icon-delete" />
           </el-button>
@@ -150,6 +150,9 @@ import {
   updateToolOrder,
   deleteToolOrder
 } from '@/api/tool_order'
+import {
+  queryToolConfigPrice
+} from '@/api/tool_config'
 import CustomPage from '@/components/CustomPage'
 export default {
   name: 'ToolOrder',
@@ -251,8 +254,10 @@ export default {
      * @param data
      */
     doAdd(data) {
+      data.fee = self._.toString(data.fee)
+      console.log(data)
       addToolOrder(data)
-        .then((res) => {
+        .then(() => {
           this.$refs.page.clickClose()
           this.getList()
         })
@@ -274,8 +279,11 @@ export default {
     /**
      * 响应增加
      */
-    clickAdd() {
+    async clickAdd() {
+      const config_price = await queryToolConfigPrice()
       this.emptyData.code = this.search.name
+      this.emptyData.account_price = config_price.data.account_price
+      this.emptyData.day_price = config_price.data.day_price
     },
     handleBeforeUpload(file) {
       return new Promise((resolve, reject) => {

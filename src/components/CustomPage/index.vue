@@ -207,7 +207,11 @@ export default {
     /**
      * 响应添加
      */
-    clickAdd() {
+    async clickAdd() {
+      await new Promise((resolve) => {
+        this.$emit('click-add')
+        resolve('随便什么数据')
+      })
       this.$emit('click-add')
       this.currentState = 'add'
       this.current = this._.cloneDeep(this.emptyData)

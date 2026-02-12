@@ -38,8 +38,8 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        // target: 'http://127.0.0.1:8787',
-        target: 'https://fangyunqingmaketool.dpdns.org',
+        target: 'http://127.0.0.1:8787',
+        // target: 'https://fangyunqingmaketool.dpdns.org',
         secure: false,
         changeOrigin: true,
         pathRewrite: {
