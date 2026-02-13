@@ -1,8 +1,9 @@
 <template>
   <div class="custom-margin-20">
     <div class="custom-flex custom-row-between">
-      <div>
+      <div v-if="mode === 'write'">
         <el-button
+          size="mini"
           icon="el-icon-plus"
           type="primary"
           @click="clickAdd"
@@ -15,12 +16,13 @@
           <el-col :span="15">
             <el-input
               v-model="search.name"
+              size="mini"
               :placeholder="placeholder"
               @keyup.enter.native="clickQuery"
             />
           </el-col>
           <el-col :span="3">
-            <el-button type="primary" @click="clickQuery">
+            <el-button type="primary" size="mini" @click="clickQuery">
               <i class="el-icon-refresh" />
               {{ $t("common.refresh") }}
             </el-button>
@@ -33,7 +35,7 @@
         v-loading="loading"
         :data="data"
         tooltip-effect="dark"
-        height="50vh"
+        height="90vh"
         :row-style="{padding:'5px'}"
         :cell-style="{padding:'5px'}"
         :header-row-style="{padding:'1px'}"
@@ -44,17 +46,15 @@
       >
         <slot name="primary" />
         <el-table-column fixed="right" align="center" min-width="150">
-          <template v-if="stateEditable(rowData.row)" slot-scope="rowData">
-            <el-tooltip :content="$t('common.view')" placement="top">
-              <el-button type="text" @click="clickView(rowData.row)">
-                <i class="el-icon-document" />
+          <template slot-scope="rowData">
+            <el-button-group>
+              <el-button type="primary" size="mini" @click="clickView(rowData.row)">
+                {{ "$t('common.view')" }}
               </el-button>
-            </el-tooltip>
-            <el-tooltip :content="$t('common.delete')" placement="top">
-              <el-button type="text" @click="clickDelete(rowData.row)">
-                <i class="el-icon-delete" />
+              <el-button -if="mode === 'write'" type="primary" size="mini" @click="clickDelete(rowData.row)">
+                {{ "$t('common.delete')" }}
               </el-button>
-            </el-tooltip>
+            </el-button-group>
             <slot name="action" :row="rowData.row" />
           </template>
         </el-table-column>
@@ -80,7 +80,7 @@
             {{ $t("common.confirm") }}
           </el-button>
           <el-button
-            v-if="currentState === 'view'"
+            v-if="currentState === 'view' && mode === 'write'"
             size="mini"
             type="primary"
             @click="clickEdit"
@@ -163,6 +163,10 @@ export default {
     stateEditable: {
       type: Function,
       default: (row) => { return true }
+    },
+    mode: {
+      type: String,
+      default: 'write'
     }
   },
   data() {

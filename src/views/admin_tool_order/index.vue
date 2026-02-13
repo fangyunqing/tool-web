@@ -8,6 +8,7 @@
       :placeholder="$t('toolOrder.enterMachineCode').toString()"
       :empty-data="emptyData"
       drawer-size="30%"
+      mode="read"
       @refresh="getList"
       @query="query"
       @add="doAdd"
@@ -17,6 +18,7 @@
       @click-add="clickAdd"
     >
       <template v-slot:primary>
+        <el-table-column align="center" :label="$t('toolOrder.code').toString()" min-width="120" prop="code" />
         <el-table-column align="center" :label="$t('toolOrder.fee').toString()" min-width="80" prop="fee" />
         <el-table-column align="center" :label="$t('toolOrder.add_account_num').toString()" min-width="50" prop="add_account_num" />
         <el-table-column align="center" :label="$t('toolOrder.add_day_num').toString()" min-width="50" prop="add_day_num" />
@@ -30,38 +32,6 @@
         <el-table-column align="center" :label="$t('toolOrder.create_time').toString()" min-width="120" prop="create_time" />
         <el-table-column align="center" :label="$t('toolOrder.pay_time').toString()" min-width="120" prop="pay_time" />
         <el-table-column align="center" :label="$t('toolOrder.finish_time').toString()" min-width="80" prop="finish_time" />
-      </template>
-
-      <template v-slot:addOrEdit="{ current }">
-
-        <el-form-item :label="$t('toolOrder.code').toString()" prop="code">
-          <el-input
-            v-model="current.code"
-          />
-        </el-form-item>
-        <el-form-item :label="$t('toolOrder.fee').toString()" prop="fee">
-          <el-tag>{{ current.fee }}</el-tag>
-        </el-form-item>
-        <el-form-item :label="$t('toolOrder.account_price').toString()" prop="account_price">
-          <el-tag>{{ current.account_price }}</el-tag>
-        </el-form-item>
-        <el-form-item :label="$t('toolOrder.add_account_num').toString()" prop="add_account_num">
-          <el-input-number
-            v-model.number="current.add_account_num"
-            :min="1"
-            :max="99"
-          />
-        </el-form-item>
-        <el-form-item :label="$t('toolOrder.day_price').toString()" prop="account_price">
-          <el-tag>{{ current.day_price }}</el-tag>
-        </el-form-item>
-        <el-form-item :label="$t('toolOrder.add_day_num').toString()" prop="add_day_num">
-          <el-input-number
-            v-model="current.add_day_num"
-            :min="1"
-            :max="99"
-          />
-        </el-form-item>
       </template>
 
       <template v-slot:view="{ current }">
@@ -101,7 +71,7 @@
       </template>
 
       <template v-slot:action>
-        <el-tooltip :content="$t('common.delete').toString()" placement="top">
+        <el-tooltip :content="$t('common. ').toString()" placement="top">
           <el-button type="text" @click="showPayVoucher = true">
             <i class="el-icon-delete" />
           </el-button>
@@ -155,8 +125,14 @@ import {
 } from '@/api/tool_config'
 import CustomPage from '@/components/CustomPage'
 export default {
-  name: 'ToolOrder',
+  name: 'AdminToolOrder',
   components: { CustomPage },
+  props: {
+    mode: {
+      type: String,
+      default: 'write'
+    }
+  },
   data() {
     return {
       /**
