@@ -211,15 +211,13 @@ export default {
     /**
      * 响应添加
      */
-    async clickAdd() {
-      await new Promise((resolve) => {
-        this.$emit('click-add')
-        resolve('随便什么数据')
-      })
+    clickAdd() {
       this.$emit('click-add')
-      this.currentState = 'add'
-      this.current = this._.cloneDeep(this.emptyData)
-      this.showDrawer = true
+      this.$nextTick(() => {
+        this.currentState = 'add'
+        this.current = this._.cloneDeep(this.emptyData)
+        this.showDrawer = true
+      })
     },
     /**
      * 响应刷新
