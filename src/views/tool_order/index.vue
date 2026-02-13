@@ -219,6 +219,12 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    queryToolConfigPrice().then((res) => {
+      this.emptyData.day_price = res.data.day_price
+      this.emptyData.account_price = res.data.account_price
+    })
+  },
   methods: {
     /**
      * 获取数据
@@ -256,6 +262,12 @@ export default {
           this.$refs.page.clickClose()
           this.getList()
         })
+        .catch(() => {
+          queryToolConfigPrice().then((res) => {
+            this.emptyData.day_price = res.data.day_price
+            this.emptyData.account_price = res.data.account_price
+          })
+        })
     },
     /**
      * 删除
@@ -274,11 +286,8 @@ export default {
     /**
      * 响应增加
      */
-    async clickAdd() {
-      const config_price = await queryToolConfigPrice()
+    clickAdd() {
       this.emptyData.code = this.search.name
-      this.emptyData.account_price = config_price.data.account_price
-      this.emptyData.day_price = config_price.data.day_price
     },
     handleBeforeUpload(file) {
       return new Promise((resolve) => {
