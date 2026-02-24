@@ -17,12 +17,14 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
-
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/admin_tool_order' })
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
+    } else {
+      next()
+      NProgress.done()
     }
   } else {
     /* has no token*/

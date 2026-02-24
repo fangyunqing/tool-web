@@ -30,6 +30,9 @@
 
 <script>
 
+import { login } from '@/api/user'
+import { setToken } from '@/utils/auth'
+
 export default {
   name: 'Login',
   data() {
@@ -50,18 +53,12 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          console.log(this.loginForm)
-          this.$store.dispatch('user/login', this.loginForm)
+          login(this.loginForm.adminCode)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              this.loading = false
+              setToken(this.loginForm.adminCode)
+              this.$router.push('/admin_tool_order')
             })
-            .catch((e) => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
+            .finally(() => { this.loading = false })
         }
       })
     }

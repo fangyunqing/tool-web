@@ -25,8 +25,15 @@ export function addToolOrder(data) {
 
 export function deleteToolOrder(id) {
   return request({
-    url: `/api/tool_order/${id}`,
+    url: `/tool_order/${id}`,
     method: 'delete'
+  })
+}
+
+export function payToolOrder(id) {
+  return request({
+    url: `/tool_order/pay/${id}`,
+    method: 'put'
   })
 }
 

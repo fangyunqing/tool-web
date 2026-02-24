@@ -43,6 +43,7 @@ module.exports = {
     finish_time: 'Finish Time',
     enterMachineCode: 'Please Enter Machine',
     enterAddCountNum: 'Please Enter Add-Count-Num',
-    enterAddDayNum: 'Please Enter Add-Count-Num'
+    enterAddDayNum: 'Please Enter Add-Count-Num',
+    uploadPayVoucher: 'Upload Pay Voucher'
   }
 }

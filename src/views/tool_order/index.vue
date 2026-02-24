@@ -100,12 +100,10 @@
         </el-form-item>
       </template>
 
-      <template v-slot:action>
-        <el-tooltip :content="$t('common.delete').toString()" placement="top">
-          <el-button type="text" @click="showPayVoucher = true">
-            <i class="el-icon-delete" />
-          </el-button>
-        </el-tooltip>
+      <template v-slot:action="{ row }">
+        <el-button -if="mode === 'write'" type="primary" size="mini" @click="clickUploadPayVoucher(row)">
+          {{ $t("toolOrder.uploadPayVoucher") }}
+        </el-button>
       </template>
     </custom-page>
     <el-drawer
@@ -128,15 +126,36 @@
       <el-divider class="custom-margin-2" />
 
       <div class="custom-margin-12">
-        <el-upload
-          :before-upload="handleBeforeUpload"
-          :before-remove="handleBeforeDelete"
-          list-type="picture"
-          http-request="() => {}"
-          action=""
+        <el-form
+          ref="drawerForm"
+          class="custom-margin-20"
+          :model="currentData"
+          label-width="120px"
+          size="mini"
         >
-          <el-button>上传付款凭证</el-button>
-        </el-upload>
+          <el-form-item :label="$t('toolOrder.code').toString()" prop="code">
+            {{ currentData.code }}
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.fee').toString()" prop="fee">
+            {{ currentData.fee }}
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.account_price').toString()" prop="account_price">
+            <el-tag>{{ currentData.account_price }}</el-tag>
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.add_account_num').toString()" prop="add_count_num">
+            {{ currentData.add_account_num }}
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.day_price').toString()" prop="day_price">
+            <el-tag>{{ currentData.day_price }}</el-tag>
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.add_day_num').toString()" prop="add_day_num">
+            {{ currentData.add_day_num }}
+          </el-form-item>
+          <el-form-item>
+            <el-image :src="require('@/assets/pay/wx_pay.jpg')" />
+          </el-form-item>
+        </el-form>
+
       </div>
 
     </el-drawer>
@@ -148,12 +167,14 @@ import {
   queryToolOrderByMachineCode,
   addToolOrder,
   updateToolOrder,
-  deleteToolOrder
+  deleteToolOrder,
+  payToolOrder
 } from '@/api/tool_order'
 import {
   queryToolConfigPrice
 } from '@/api/tool_config'
 import CustomPage from '@/components/CustomPage'
+import { getUserCode, setUserCode } from '@/utils/auth'
 export default {
   name: 'ToolOrder',
   components: { CustomPage },
@@ -224,17 +245,25 @@ export default {
       this.emptyData.day_price = res.data.day_price
       this.emptyData.account_price = res.data.account_price
     })
+    this.getList()
   },
   methods: {
     /**
      * 获取数据
      */
     getList() {
+      let userCode = getUserCode()
       if (this.search.name) {
+        userCode = this.search.name
+      } else if (userCode) {
+        this.search.name = userCode
+      }
+      if (userCode) {
         this.$refs.page.loading = true
-        queryToolOrderByMachineCode(this.search.name)
+        queryToolOrderByMachineCode(userCode)
           .then(res => {
             this.data = res.data
+            setUserCode(userCode)
           })
           .finally(() => { this.$refs.page.loading = false })
       }
@@ -289,26 +318,29 @@ export default {
     clickAdd() {
       this.emptyData.code = this.search.name
     },
-    handleBeforeUpload(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.currentData.pay_voucher = e.target.result
-        }
-        reader.onerror = () => {}
-        reader.readAsDataURL(file)
-        resolve(false)
-      })
-    },
-    handleBeforeDelete() {
-      this.currentData.pay_voucher = ''
-    },
+    /**
+     * 关闭付款
+     */
     clickPayVoucherClose() {
-      this.currentData.pay_voucher = ''
       this.$refs.payPayVoucher.closeDrawer()
     },
+    /**
+     * 确认付款
+     */
     clickPayVoucherConfirm() {
-
+      payToolOrder(this.currentData.id)
+        .then(() => {
+          this.getList()
+          this.showPayVoucher = false
+        })
+    },
+    /**
+     * 点击付款
+     * @param data
+     */
+    clickUploadPayVoucher(data) {
+      this.currentData = data
+      this.showPayVoucher = true
     }
   }
 }

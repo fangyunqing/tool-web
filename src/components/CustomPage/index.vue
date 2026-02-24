@@ -49,13 +49,13 @@
           <template slot-scope="rowData">
             <el-button-group>
               <el-button type="primary" size="mini" @click="clickView(rowData.row)">
-                {{ "$t('common.view')" }}
+                {{ $t('common.view') }}
               </el-button>
               <el-button -if="mode === 'write'" type="primary" size="mini" @click="clickDelete(rowData.row)">
-                {{ "$t('common.delete')" }}
+                {{ $t('common.delete') }}
               </el-button>
+              <slot name="action" :row="rowData.row" />
             </el-button-group>
-            <slot name="action" :row="rowData.row" />
           </template>
         </el-table-column>
       </el-table>

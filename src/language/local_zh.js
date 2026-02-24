@@ -45,6 +45,7 @@ module.exports = {
     finish_time: '完成时间',
     enterMachineCode: '请输入机器码',
     enterAddCountNum: '请输入账户增加数',
-    enterAddDayNum: '请输入天数增加数'
+    enterAddDayNum: '请输入天数增加数',
+    uploadPayVoucher: '上传付款凭证'
   }
 }
