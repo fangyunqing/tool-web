@@ -14,12 +14,17 @@
       <div>
         <el-row :gutter="20">
           <el-col :span="15">
-            <el-input
-              v-model="search.name"
-              size="mini"
-              :placeholder="placeholder"
-              @keyup.enter.native="clickQuery"
-            />
+            <div class="custom-flex custom-row-between">
+              <el-input
+                v-if="showSearch"
+                v-model="search.name"
+                size="mini"
+                :placeholder="placeholder"
+                @keyup.enter.native="clickQuery"
+              />
+              <slot name="add_search" />
+            </div>
+
           </el-col>
           <el-col :span="3">
             <el-button type="primary" size="mini" @click="clickQuery">
@@ -164,9 +169,19 @@ export default {
       type: Function,
       default: (row) => { return true }
     },
+    /**
+     * 模式
+     */
     mode: {
       type: String,
       default: 'write'
+    },
+    /**
+     * 显示查询
+     */
+    showSearch: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

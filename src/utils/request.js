@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import { getToken, TokenKey } from '@/utils/auth'
+import { getToken, TokenKey, removeToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -51,6 +51,11 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
+
+      if (res.code === 401) {
+        removeToken()
+        location.reload()
+      }
 
       return Promise.reject(new Error(res.message || 'Error'))
     } else {

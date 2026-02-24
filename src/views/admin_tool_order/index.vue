@@ -7,8 +7,9 @@
       :rules="rules"
       :placeholder="$t('toolOrder.enterMachineCode').toString()"
       :empty-data="emptyData"
-      drawer-size="30%"
       mode="read"
+      :show-search="false"
+      drawer-size="30%"
       @refresh="getList"
       @query="query"
       @add="doAdd"
@@ -17,8 +18,17 @@
       @current="currentData = $event"
       @click-add="clickAdd"
     >
+      <template v-slot:add_search>
+        <el-select v-model="search.order_status" placeholder="请选择" size="mini">
+          <el-option
+            v-for="item in order_status_options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </template>
       <template v-slot:primary>
-        <el-table-column align="center" :label="$t('toolOrder.code').toString()" min-width="120" prop="code" />
         <el-table-column align="center" :label="$t('toolOrder.fee').toString()" min-width="80" prop="fee" />
         <el-table-column align="center" :label="$t('toolOrder.add_account_num').toString()" min-width="50" prop="add_account_num" />
         <el-table-column align="center" :label="$t('toolOrder.add_day_num').toString()" min-width="50" prop="add_day_num" />
@@ -32,6 +42,38 @@
         <el-table-column align="center" :label="$t('toolOrder.create_time').toString()" min-width="120" prop="create_time" />
         <el-table-column align="center" :label="$t('toolOrder.pay_time').toString()" min-width="120" prop="pay_time" />
         <el-table-column align="center" :label="$t('toolOrder.finish_time').toString()" min-width="80" prop="finish_time" />
+      </template>
+
+      <template v-slot:addOrEdit="{ current }">
+
+        <el-form-item :label="$t('toolOrder.code').toString()" prop="code">
+          <el-input
+            v-model="current.code"
+          />
+        </el-form-item>
+        <el-form-item :label="$t('toolOrder.fee').toString()" prop="fee">
+          <el-tag>{{ current.fee }}</el-tag>
+        </el-form-item>
+        <el-form-item :label="$t('toolOrder.account_price').toString()" prop="account_price">
+          <el-tag>{{ current.account_price }}</el-tag>
+        </el-form-item>
+        <el-form-item :label="$t('toolOrder.add_account_num').toString()" prop="add_account_num">
+          <el-input-number
+            v-model.number="current.add_account_num"
+            :min="1"
+            :max="99"
+          />
+        </el-form-item>
+        <el-form-item :label="$t('toolOrder.day_price').toString()" prop="account_price">
+          <el-tag>{{ current.day_price }}</el-tag>
+        </el-form-item>
+        <el-form-item :label="$t('toolOrder.add_day_num').toString()" prop="add_day_num">
+          <el-input-number
+            v-model="current.add_day_num"
+            :min="1"
+            :max="99"
+          />
+        </el-form-item>
       </template>
 
       <template v-slot:view="{ current }">
@@ -70,12 +112,10 @@
         </el-form-item>
       </template>
 
-      <template v-slot:action>
-        <el-tooltip :content="$t('common. ').toString()" placement="top">
-          <el-button type="text" @click="showPayVoucher = true">
-            <i class="el-icon-delete" />
-          </el-button>
-        </el-tooltip>
+      <template v-slot:action="{ row }">
+        <el-button -if="mode === 'write'" type="primary" size="mini" @click="clickUploadPayVoucher(row)">
+          {{ $t("toolOrder.uploadPayVoucher") }}
+        </el-button>
       </template>
     </custom-page>
     <el-drawer
@@ -98,15 +138,36 @@
       <el-divider class="custom-margin-2" />
 
       <div class="custom-margin-12">
-        <el-upload
-          :before-upload="handleBeforeUpload"
-          :before-remove="handleBeforeDelete"
-          list-type="picture"
-          http-request="() => {}"
-          action=""
+        <el-form
+          ref="drawerForm"
+          class="custom-margin-20"
+          :model="currentData"
+          label-width="120px"
+          size="mini"
         >
-          <el-button>上传付款凭证</el-button>
-        </el-upload>
+          <el-form-item :label="$t('toolOrder.code').toString()" prop="code">
+            {{ currentData.code }}
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.fee').toString()" prop="fee">
+            {{ currentData.fee }}
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.account_price').toString()" prop="account_price">
+            <el-tag>{{ currentData.account_price }}</el-tag>
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.add_account_num').toString()" prop="add_count_num">
+            {{ currentData.add_account_num }}
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.day_price').toString()" prop="day_price">
+            <el-tag>{{ currentData.day_price }}</el-tag>
+          </el-form-item>
+          <el-form-item :label="$t('toolOrder.add_day_num').toString()" prop="add_day_num">
+            {{ currentData.add_day_num }}
+          </el-form-item>
+          <el-form-item>
+            <el-image :src="require('@/assets/pay/wx_pay.jpg')" />
+          </el-form-item>
+        </el-form>
+
       </div>
 
     </el-drawer>
@@ -118,21 +179,17 @@ import {
   queryToolOrderByMachineCode,
   addToolOrder,
   updateToolOrder,
-  deleteToolOrder
+  deleteToolOrder,
+  payToolOrder
 } from '@/api/tool_order'
 import {
   queryToolConfigPrice
 } from '@/api/tool_config'
 import CustomPage from '@/components/CustomPage'
+import { getUserCode, setUserCode } from '@/utils/auth'
 export default {
   name: 'AdminToolOrder',
   components: { CustomPage },
-  props: {
-    mode: {
-      type: String,
-      default: 'write'
-    }
-  },
   data() {
     return {
       /**
@@ -142,12 +199,30 @@ export default {
       /**
        *
        */
+      order_status_options: [
+        {
+          value: 1,
+          label: '未付款'
+        },
+        {
+          value: 2,
+          label: '付款未确认'
+        },
+        {
+          value: 3,
+          label: '已确认'
+        }
+      ],
+      /**
+       *
+       */
       prices: { 'account_price': 0.1, 'day_price': 0.2 },
       /**
        * 搜索
        */
       search: {
-        name: ''
+        name: '',
+        order_status: 2
       },
       /**
        * 校验规则
@@ -195,16 +270,30 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    queryToolConfigPrice().then((res) => {
+      this.emptyData.day_price = res.data.day_price
+      this.emptyData.account_price = res.data.account_price
+    })
+    this.getList()
+  },
   methods: {
     /**
      * 获取数据
      */
     getList() {
+      let userCode = getUserCode()
       if (this.search.name) {
+        userCode = this.search.name
+      } else if (userCode) {
+        this.search.name = userCode
+      }
+      if (userCode) {
         this.$refs.page.loading = true
-        queryToolOrderByMachineCode(this.search.name)
+        queryToolOrderByMachineCode(userCode)
           .then(res => {
             this.data = res.data
+            setUserCode(userCode)
           })
           .finally(() => { this.$refs.page.loading = false })
       }
@@ -232,6 +321,12 @@ export default {
           this.$refs.page.clickClose()
           this.getList()
         })
+        .catch(() => {
+          queryToolConfigPrice().then((res) => {
+            this.emptyData.day_price = res.data.day_price
+            this.emptyData.account_price = res.data.account_price
+          })
+        })
     },
     /**
      * 删除
@@ -250,32 +345,32 @@ export default {
     /**
      * 响应增加
      */
-    async clickAdd() {
-      const config_price = await queryToolConfigPrice()
+    clickAdd() {
       this.emptyData.code = this.search.name
-      this.emptyData.account_price = config_price.data.account_price
-      this.emptyData.day_price = config_price.data.day_price
     },
-    handleBeforeUpload(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.currentData.pay_voucher = e.target.result
-        }
-        reader.onerror = () => {}
-        reader.readAsDataURL(file)
-        resolve(false)
-      })
-    },
-    handleBeforeDelete() {
-      this.currentData.pay_voucher = ''
-    },
+    /**
+     * 关闭付款
+     */
     clickPayVoucherClose() {
-      this.currentData.pay_voucher = ''
       this.$refs.payPayVoucher.closeDrawer()
     },
+    /**
+     * 确认付款
+     */
     clickPayVoucherConfirm() {
-
+      payToolOrder(this.currentData.id)
+        .then(() => {
+          this.getList()
+          this.showPayVoucher = false
+        })
+    },
+    /**
+     * 点击付款
+     * @param data
+     */
+    clickUploadPayVoucher(data) {
+      this.currentData = data
+      this.showPayVoucher = true
     }
   }
 }
