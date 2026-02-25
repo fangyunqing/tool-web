@@ -139,7 +139,7 @@ export default {
      */
     rules: {
       type: Object,
-      required: true
+      default: () => ({})
     },
     /**
      * 占位符

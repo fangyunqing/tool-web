@@ -7,6 +7,13 @@ export function queryToolOrderByMachineCode(code) {
   })
 }
 
+export function queryToolOrderByOrderStatus(order_status) {
+  return request({
+    url: `/tool_order/order_status/${order_status}`,
+    method: 'get'
+  })
+}
+
 export function updateToolOrder(data) {
   return request({
     url: '/tool_order/update',
