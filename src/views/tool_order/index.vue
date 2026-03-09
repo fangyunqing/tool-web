@@ -16,6 +16,21 @@
       @current="currentData = $event"
       @click-add="clickAdd"
     >
+      <template v-slot:additional>
+        <div v-if="user" class="custom-margin-10">
+          <el-row>
+            <el-col :span="3">
+              <el-tag>机器码：{{ user.code }}</el-tag>
+            </el-col>
+            <el-col :span="6">
+              <el-tag>有效期：{{ dayjs(user.life_time).format('YYYY-MM-DD HH:mm:ss') }}</el-tag>
+            </el-col>
+            <el-col :span="2">
+              <el-tag>账户数：{{ user.account_num }}</el-tag>
+            </el-col>
+          </el-row>
+        </div>
+      </template>
       <template v-slot:primary>
         <el-table-column align="center" :label="$t('toolOrder.fee').toString()" min-width="80" prop="fee" />
         <el-table-column align="center" :label="$t('toolOrder.add_account_num').toString()" min-width="50" prop="add_account_num" />
@@ -102,13 +117,13 @@
 
       <template v-slot:action="{ row }">
         <el-button -if="mode === 'write'" type="primary" size="mini" @click="clickUploadPayVoucher(row)">
-          {{ $t("toolOrder.uploadPayVoucher") }}
+          {{ $t("toolOrder.pay") }}
         </el-button>
       </template>
     </custom-page>
     <el-drawer
       ref="payPayVoucher"
-      :visible.sync="showPayVoucher"
+      :visible.sync="showPay"
       :show-close="false"
       :destroy-on-close="true"
       :wrapper-closable="false"
@@ -164,17 +179,16 @@
 
 <script>
 import {
-  queryToolOrderByMachineCode,
   addToolOrder,
-  updateToolOrder,
   deleteToolOrder,
-  payToolOrder
+  payToolOrder,
+  queryToolOrderByMachineCode,
+  updateToolOrder
 } from '@/api/tool_order'
-import {
-  queryToolConfigPrice
-} from '@/api/tool_config'
+import { queryToolConfigPrice } from '@/api/tool_config'
 import CustomPage from '@/components/CustomPage'
 import { getUserCode, setUserCode } from '@/utils/auth'
+
 export default {
   name: 'ToolOrder',
   components: { CustomPage },
@@ -184,6 +198,10 @@ export default {
        * 数据
        */
       data: [],
+      /**
+       * 用户数据
+       */
+      user: {},
       /**
        *
        */
@@ -220,9 +238,9 @@ export default {
         day_price: '0.1'
       },
       /**
-       * 显示付款凭证
+       * 显示付款
        */
-      showPayVoucher: false
+      showPay: false
     }
   },
   watch: {
@@ -262,7 +280,8 @@ export default {
         this.$refs.page.loading = true
         queryToolOrderByMachineCode(userCode)
           .then(res => {
-            this.data = res.data
+            this.data = res.data.orders
+            this.user = res.data.user
             setUserCode(userCode)
           })
           .finally(() => { this.$refs.page.loading = false })
@@ -331,7 +350,7 @@ export default {
       payToolOrder(this.currentData.id)
         .then(() => {
           this.getList()
-          this.showPayVoucher = false
+          this.showPay = false
         })
     },
     /**
@@ -340,7 +359,7 @@ export default {
      */
     clickUploadPayVoucher(data) {
       this.currentData = data
-      this.showPayVoucher = true
+      this.showPay = true
     }
   }
 }

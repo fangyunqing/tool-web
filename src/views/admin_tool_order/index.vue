@@ -76,8 +76,8 @@
       </template>
 
       <template v-slot:action="{ row }">
-        <el-button -if="mode === 'write'" type="primary" size="mini" @click="clickUploadPayVoucher(row)">
-          {{ $t("toolOrder.uploadPayVoucher") }}
+        <el-button -if="mode === 'write'" type="primary" size="mini" @click="clickConfirm(row)">
+          {{ $t("common.confirm") }}
         </el-button>
       </template>
     </custom-page>
@@ -86,7 +86,8 @@
 
 <script>
 import {
-  queryToolOrderByOrderStatus
+  queryToolOrderByOrderStatus,
+  confirmToolOrder
 } from '@/api/tool_order'
 import CustomPage from '@/components/CustomPage'
 
@@ -159,6 +160,15 @@ export default {
      */
     query() {
       this.getList()
+    },
+    /**
+     * 响应确认
+     */
+    clickConfirm(row) {
+      confirmToolOrder(row.id)
+        .then(() => {
+          this.getList()
+        })
     }
   }
 }

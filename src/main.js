@@ -25,6 +25,9 @@ import i18n from './language/index.js'
 import _ from 'lodash'
 Vue.prototype._ = _
 
+import dayjs from 'dayjs'
+Vue.prototype.dayjs = dayjs
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

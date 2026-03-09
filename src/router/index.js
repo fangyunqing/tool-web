@@ -50,6 +50,11 @@ export const constantRoutes = [
     path: '/admin_tool_order',
     component: () => import('@/views/admin_tool_order/index'),
     hidden: true
+  },
+  {
+    path: '/tool_user',
+    component: () => import('@/views/tool_user/index'),
+    hidden: true
   }
 ]
 

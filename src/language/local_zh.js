@@ -39,7 +39,7 @@ module.exports = {
     day_price: '天数单价',
     add_day_num: '天数(+)',
     order_status: '订单状态',
-    pay_voucher: '付款凭证',
+    pay: '付款',
     create_time: '创建时间',
     pay_time: '付款时间',
     finish_time: '完成时间',
@@ -47,5 +47,15 @@ module.exports = {
     enterAddCountNum: '请输入账户增加数',
     enterAddDayNum: '请输入天数增加数',
     uploadPayVoucher: '上传付款凭证'
+  },
+  toolUser: {
+    code: '机器码',
+    life_time: '有效期',
+    account_num: '账户数',
+    create_time: '创建时间',
+    update_time: '更新时间',
+    enterMachineCode: '请输入机器码',
+    enterCountNum: '请输入账户数',
+    enterLifeTime: '请输入有效期'
   }
 }

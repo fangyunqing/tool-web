@@ -42,8 +42,17 @@ module.exports = {
     pay_time: 'Pay Time',
     finish_time: 'Finish Time',
     enterMachineCode: 'Please Enter Machine',
-    enterAddCountNum: 'Please Enter Add-Count-Num',
-    enterAddDayNum: 'Please Enter Add-Count-Num',
-    uploadPayVoucher: 'Upload Pay Voucher'
+    enterAddCountNum: 'Please Enter Machine',
+    enterAddDayNum: 'Please Enter Add-Count-Num'
+  },
+  toolUser: {
+    code: 'Machine Code',
+    life_time: 'Life Time',
+    account_num: 'Account Num',
+    create_time: 'Create Time',
+    update_time: 'Update Time',
+    enterMachineCode: 'Please Enter Machine',
+    enterCountNum: 'Please Enter Account Num',
+    enterLifeTime: 'Please Enter Life Time'
   }
 }

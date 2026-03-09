@@ -35,6 +35,7 @@
         </el-row>
       </div>
     </div>
+    <div><slot name="additional" /></div>
     <div class="custom-margin-top-12">
       <el-table
         v-loading="loading"
@@ -56,7 +57,7 @@
               <el-button type="primary" size="mini" @click="clickView(rowData.row)">
                 {{ $t('common.view') }}
               </el-button>
-              <el-button -if="mode === 'write'" type="primary" size="mini" @click="clickDelete(rowData.row)">
+              <el-button v-if="mode === 'write'" type="primary" size="mini" @click="clickDelete(rowData.row)">
                 {{ $t('common.delete') }}
               </el-button>
               <slot name="action" :row="rowData.row" />

@@ -44,3 +44,9 @@ export function payToolOrder(id) {
   })
 }
 
+export function confirmToolOrder(id) {
+  return request({
+    url: `/tool_order/confirm/${id}`,
+    method: 'put'
+  })
+}
